@@ -39,8 +39,6 @@ with open(model_path) as f:
         if f'class {model_path.stem}' in line:
             result += f'    {true_field_name}:{field_type}\n'
 
-print(result)
-
 with open(model_path, 'w') as f:
     f.write(result)
 
@@ -49,7 +47,6 @@ if args.getter:
         getter_pattern = f.read()
 
     with open(model_path, 'a') as f:
-        print(getter_pattern.format(field_name=field_name, true_field_name=true_field_name, field_type=field_type))
         f.write(getter_pattern.format(field_name=field_name, true_field_name=true_field_name, field_type=field_type))
 
 if args.setter: 
@@ -57,6 +54,7 @@ if args.setter:
         setter_pattern = f.read()
 
     with open(model_path, 'a') as f:
-        print(setter_pattern.format(field_name=field_name, true_field_name=true_field_name, field_type=field_type))
         f.write(setter_pattern.format(field_name=field_name, true_field_name=true_field_name, field_type=field_type))
+
+print('field added!')
     

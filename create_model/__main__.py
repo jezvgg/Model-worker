@@ -31,3 +31,5 @@ with open(pattern) as f:
 
 with open(args.model_path, 'w') as f:
     f.write(st.format(**kwargs))
+
+print('model created!')
