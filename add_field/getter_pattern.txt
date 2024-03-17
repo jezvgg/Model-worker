@@ -1,0 +1,5 @@
+
+
+    @property
+    def {field_name}(self) -> {field_type}:
+        return self.{true_field_name}
