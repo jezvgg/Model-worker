@@ -1,8 +1,7 @@
-At first, you need create projact.
+At first, you need to build projact.
 ```
 pip install --editable .
 ```
-Use this command to build projact.
 
 Now, command to create your model:
 ```
