@@ -1,18 +1,16 @@
-Easy way to create and set your models in Python.
-
-```bash
-python3 create_model {model_name} {--referance=model_referance}
+At first, you need create projact.
 ```
-create_model command create new class, and if you need can inheritance from other model.
-
-```bash
-python3 add_field {-gsp} {model_name} {field_name} {field_type}
+pip install --editable .
 ```
-Recreate your model with new field and annotations.
-You can create your field private and add property and setter with -gs.
-And you can create protacted field with -p.
+Use this command to build projact.
 
+Now, command to create your model:
+```
+mw {model_path} --ref={referance_model_path} [-f{gsp} {field_name} {field_type}...]
+```
+You can create model with fields, when you initialize field, you need to write -f.
 
-
-https://github.com/jezvgg/mw/assets/40557881/dbee8822-4d00-4570-98fa-02776a6957b4
-
+If you want to add modificator to the field you can write:
+-p - to create protacted field
+-g - to create getter to the field
+-s - to create setter to the field
