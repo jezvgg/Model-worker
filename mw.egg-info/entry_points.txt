@@ -1,3 +1,0 @@
-[console_scripts]
-mw = mw.__main__:main
-
