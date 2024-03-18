@@ -1,7 +1,0 @@
-
-
-
-class {className}:
-
-    def __init__(self) -> None:
-        pass
