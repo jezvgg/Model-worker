@@ -75,7 +75,3 @@ def main(model_path: str, referance: str, patterns: str, fields):
         f.write(result)
 
     click.echo('Model created!')
-
-
-if __name__ == '__main__':
-    main()
