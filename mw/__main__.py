@@ -54,7 +54,7 @@ def main(model_path: str, referance: str, patterns: str, fields):
         if 'p' in field[0] :
             class_field = '_' + field[1]
         fields_pattern += f'    {class_field}: {field[2]}\n'
-        init_pattern = init_pattern.replace(')',  f', {field[1]}: {field[2]})')
+        init_pattern = init_pattern.replace('self',  f'self, {field[1]}: {field[2]})')
         init_pattern += f'        self.{class_field}: {field[2]} = {field[1]}\n'
 
 
