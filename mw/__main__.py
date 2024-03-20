@@ -24,7 +24,7 @@ def main(model_path: str, referance: str, patterns: str, fields):
     if referance:
         referance = Path(referance).resolve()
         referance_model = referance.stem
-        import_path = Path('/'.join(referance.parts[len(cwd.with_suffix('').parts):]))
+        import_path = Path('/'.join(referance.with_suffix('').parts[len(cwd.parts):]))
         class_pattern = _patterns_path / 'import_pattern.txt'
         class_kwargs['referance_path'] = '.'.join(import_path.parts)
         class_kwargs['referance'] = referance_model
