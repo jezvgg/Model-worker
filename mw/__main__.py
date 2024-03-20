@@ -24,7 +24,7 @@ def main(model_path: str, referance: str, patterns: str, fields):
     if referance:
         referance = Path(referance).resolve()
         referance_model = referance.stem
-        import_path = Path('/'.join(referance.parts[len(cwd.parts)-1:]))
+        import_path = Path('/'.join(referance.parts[len(cwd.with_suffix('').parts):]))
         class_pattern = _patterns_path / 'import_pattern.txt'
         class_kwargs['referance_path'] = '.'.join(import_path.parts)
         class_kwargs['referance'] = referance_model
@@ -55,7 +55,7 @@ def main(model_path: str, referance: str, patterns: str, fields):
             class_field = '_' + field[1]
         fields_pattern += f'    {class_field}: {field[2]}\n'
         init_pattern = init_pattern.replace(')',  f', {field[1]}: {field[2]})')
-        init_pattern += f'      self.{class_field}: {field[2]} = {field[1]}\n'
+        init_pattern += f'        self.{class_field}: {field[2]} = {field[1]}\n'
 
 
     result = ''
@@ -64,7 +64,7 @@ def main(model_path: str, referance: str, patterns: str, fields):
             result += line + '\n'
             result += fields_pattern
 
-        elif '   def __init__' in line:
+        elif 'def __init__' in line:
             result += init_pattern
 
         else: result += line + '\n'
