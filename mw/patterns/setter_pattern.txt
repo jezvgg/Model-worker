@@ -1,5 +1,6 @@
 
 
+
     @{field_name}.setter
     def {field_name}(self, value : {field_type}) -> None:
         self.{true_field_name} = value
