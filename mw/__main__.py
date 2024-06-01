@@ -42,7 +42,8 @@ def main(model_path: str, referance: str, patterns: str, fields):
         setter_pattern = f.read()
 
     fields_pattern = ''
-    init_pattern = '    def __init__(self, *args, **kwargs):\n'
+    init_pattern = 'self'
+    inner_init_pattern = ''
     setters_and_getters = ''
     for field in fields:
         class_field = ''
@@ -54,8 +55,10 @@ def main(model_path: str, referance: str, patterns: str, fields):
         if 'p' in field[0] :
             class_field = '_' + field[1]
         fields_pattern += f'    {class_field}: {field[2]}\n'
-        init_pattern = init_pattern.replace('self,',  f'self, {field[1]}: {field[2]},')
-        init_pattern += f'        self.{class_field}: {field[2]} = {field[1]}\n'
+        init_pattern = init_pattern.replace('self',  f'self, {field[1]}: {field[2]}')
+        inner_init_pattern += f'        self.{class_field}: {field[2]} = {field[1]}\n'
+
+    if inner_init_pattern.count('\n') <= 1: inner_init_pattern+='        pass\n'
 
 
     result = ''
@@ -65,7 +68,8 @@ def main(model_path: str, referance: str, patterns: str, fields):
             result += fields_pattern
 
         elif 'def __init__' in line:
-            result += init_pattern
+            result += line.replace('self', init_pattern)+'\n'
+            result += inner_init_pattern
 
         else: result += line + '\n'
 
