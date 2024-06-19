@@ -10,9 +10,14 @@ patterns_path = file_dir / 'patterns'
 
 @click.command(context_settings={"ignore_unknown_options": True})
 @click.argument('model_path', type=str)
+#Имя модели 
 @click.option('--ref', 'referance', type=str)
+#Класс наследоваия модели 
 @click.option('--patterns', 'patterns', type=str)
+
 @click.option('-f', '--field', 'fields', multiple=True, type=(str, str, str))
+#Поля класса 
+ 
 def main(model_path: str, referance: str, patterns: str, fields):
     model_path = Path(model_path).resolve()
     model_name = model_path.stem
@@ -42,34 +47,63 @@ def main(model_path: str, referance: str, patterns: str, fields):
         setter_pattern = f.read()
 
     fields_pattern = ''
-    init_pattern = 'self'
-    inner_init_pattern = ''
     setters_and_getters = ''
     for field in fields:
-        class_field = ''
-        if 'g' in field[0]:
-            class_field = '__' + field[1]
-            setters_and_getters += getter_pattern.format(field_name=field[1], field_type=field[2], true_field_name=class_field)
-        if 's' in field[0]:
-            setters_and_getters += setter_pattern.format(field_name=field[1], field_type=field[2], true_field_name=class_field)
-        if 'p' in field[0] :
-            class_field = '_' + field[1]
-        fields_pattern += f'    {class_field}: {field[2]}\n'
-        init_pattern = init_pattern.replace('self',  f'self, {field[1]}: {field[2]}')
-        inner_init_pattern += f'        self.{class_field}: {field[2]} = {field[1]}\n'
 
-    if inner_init_pattern.count('\n') <= 1: inner_init_pattern+='        pass\n'
+        #Проверка на то публичный класс или нет
+        if "_" in field[0]:
+            class_field = field[1]
+            
+            #Проверка на значение по умолчанию
+            if 'n' in field[0]:
+                fields_pattern += f'    {class_field}: {field[2]}=None\n'
+            else:
+                fields_pattern += f'    {class_field}: {field[2]}\n'
+        else:
+            #Проверка на протектед 
+            if 'p' in field[0] :
+                class_field = '_' + field[1]
 
+                #Проверка на геттер 
+                if 'g' in field[0]:
+                    class_field = '_' + field[1]
+                    setters_and_getters += getter_pattern.format(field_name=field[1], field_type=field[2], true_field_name=class_field)
+
+                #Проверка на сеттер 
+                if 's' in field[0]:
+                    setters_and_getters += setter_pattern.format(field_name=field[1], field_type=field[2], true_field_name=class_field)
+
+                #Проверка на значение по умолчанию
+                if 'n' in field[0]:
+                    fields_pattern += f'    {class_field}: {field[2]}=None\n'
+                else:
+                    fields_pattern += f'    {class_field}: {field[2]}\n'
+            else:
+                class_field = '__' + field[1]
+                
+                #Проверка на геттер 
+                if 'g' in field[0]:
+                    class_field = '__' + field[1]
+                    setters_and_getters += getter_pattern.format(field_name=field[1], field_type=field[2], true_field_name=class_field)
+                
+                #Проверка на сеттер 
+                if 's' in field[0]:
+                    class_field = '__' + field[1]
+                    setters_and_getters += setter_pattern.format(field_name=field[1], field_type=field[2], true_field_name=class_field)
+                
+                #Проверка на значение по умолчанию
+                if 'n' in field[0]:
+                    fields_pattern += f'    {class_field}: {field[2]}=None\n'
+                else:
+                    fields_pattern += f'    {class_field}: {field[2]}\n'
+
+        
 
     result = ''
     for line in pattern.split('\n'):
         if f'class {model_name}' in line:
             result += line + '\n'
             result += fields_pattern
-
-        elif 'def __init__' in line:
-            result += line.replace('self', init_pattern)+'\n'
-            result += inner_init_pattern
 
         else: result += line + '\n'
 

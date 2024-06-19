@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 
 
-
+@dataclass
 class {className}:
 
-    def __init__(self) -> None:
+    
